@@ -1,0 +1,72 @@
+.student-card {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 1rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .student-photo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #e2e8f0;
+    }
+
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .slider {
+      flex: 1;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .slider-track {
+      position: absolute;
+      height: 100%;
+      background: #2563eb;
+      border-radius: 4px;
+    }
+
+    .slider-thumb {
+      width: 20px;
+      height: 20px;
+      background: white;
+      border: 2px solid #2563eb;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      cursor: grab;
+    }
+
+    .slider-thumb.grabbing {
+      cursor: grabbing;
+    }
+
+    .score {
+      width: 40px;
+      text-align: center;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    @media (max-width: 768px) {
+      .student-card {
+        grid-template-columns: 1fr;
+      }
+
+      .student-photo {
+        justify-self: center;
+      }
+    }

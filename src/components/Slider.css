@@ -1,0 +1,104 @@
+.slider-container {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1rem 0;
+    }
+
+    .slider-track {
+      display: flex;
+      will-change: transform;
+      transition: transform 0.3s ease;
+    }
+
+    .slide {
+      flex: 0 0 100%;
+      display: grid;
+      gap: 1.5rem;
+      padding: 0 1rem;
+      box-sizing: border-box;
+    }
+
+    .slider-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.8);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s ease;
+    }
+
+    .slider-nav:hover {
+      background: white;
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .slider-nav:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .slider-nav.prev {
+      left: 1rem;
+    }
+
+    .slider-nav.next {
+      right: 1rem;
+    }
+
+    .slider-dots {
+      position: absolute;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.5rem;
+      z-index: 2;
+    }
+
+    .slider-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .slider-dot.active {
+      background: white;
+      transform: scale(1.2);
+    }
+
+    .slider-dot:hover {
+      background: white;
+    }
+
+    @media (min-width: 600px) {
+      .slide {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 800px) {
+      .slide {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .slide {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }

@@ -1,0 +1,58 @@
+.csv-handler {
+      margin: 2rem 0;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .csv-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .csv-button {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .csv-button.import {
+      background: #2563eb;
+      color: white;
+    }
+
+    .csv-button.export {
+      background: #059669;
+      color: white;
+    }
+
+    .csv-button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .csv-info {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #f8fafc;
+      border-radius: 4px;
+    }
+
+    .csv-info h3 {
+      margin-bottom: 0.5rem;
+      color: #1e293b;
+    }
+
+    .csv-info pre {
+      background: #f1f5f9;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-size: 0.875rem;
+      color: #334155;
+    }
