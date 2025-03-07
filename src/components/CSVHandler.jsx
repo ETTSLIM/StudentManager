@@ -16,7 +16,7 @@ import React, { useRef } from 'react'
             const headers = lines[0].toLowerCase().trim().split(',')
 
             // Validate CSV structure
-            const requiredFields = ['name', 'gender']
+            const requiredFields = ['name']
             const missingFields = requiredFields.filter(field => !headers.includes(field))
             
             if (missingFields.length > 0) {
@@ -36,10 +36,9 @@ import React, { useRef } from 'react'
                 })
 
                 return {
-                  id: parseInt(studentData.id) || Math.floor(Math.random() * 10000),
+                  massar_numbr: parseInt(studentData.massar_numbr) || Math.floor(Math.random() * 10000),
                   name: studentData.name,
-                  gender: studentData.gender?.toLowerCase() || 'male',
-                  photo: studentData.photo || `https://api.dicebear.com/7.x/avataaars/svg?seed=${studentData.name}&gender=${studentData.gender || 'male'}`,
+                  photo: studentData.photo || `https://api.dicebear.com/7.x/avataaars/svg?seed=${studentData.name}`,
                   scores: {
                     x: parseInt(studentData.x_score) || 0,
                     y: parseInt(studentData.y_score) || 0,
@@ -62,14 +61,13 @@ import React, { useRef } from 'react'
       }
 
       const handleExport = () => {
-        const headers = ['id', 'name', 'photo', 'gender', 'x_score', 'y_score', 'mean_score']
+        const headers = ['massar_numbr', 'name', 'photo', 'x_score', 'y_score', 'mean_score']
         const csvContent = [
           headers.join(','),
           ...students.map(student => [
-            student.id,
+            student.massar_numbr,
             student.name,
             student.photo,
-            student.gender,
             student.scores.x,
             student.scores.y,
             student.scores.mean
@@ -105,9 +103,9 @@ import React, { useRef } from 'react'
           <div className="csv-info">
             <h3>CSV Format:</h3>
             <pre>
-              id,name,photo,gender,x_score,y_score,mean_score
-              1,John Doe,,male,15,18,16
-              2,Jane Smith,,female,12,14,13
+              massar_numbr,name,photo,x_score,y_score,mean_score
+              1,John Doe,,15,18,16
+              2,Jane Smith,,12,14,13
             </pre>
           </div>
         </div>

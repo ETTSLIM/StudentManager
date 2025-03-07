@@ -8,15 +8,13 @@ import React, { useState } from 'react'
     const App = () => {
       const [students, setStudents] = useState(() => 
         Array.from({ length: 20 }, (_, i) => {
-          const x = Math.floor(Math.random() * 21)
-          const y = Math.floor(Math.random() * 21)
-          const gender = Math.random() > 0.5 ? 'male' : 'female'
-          const name = `Student ${i + 1}`
+          const x = Math.floor(Math.random() * 11) + 10;
+          const y = Math.floor(Math.random() * 11) + 10;
+          const name = `Student ${i + 1}`;
           return {
-            id: i + 1,
+            massar_numbr: i + 1,
             name,
-            gender,
-            photo: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}&gender=${gender}`,
+            photo: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`,
             scores: {
               x,
               y,
@@ -26,10 +24,10 @@ import React, { useState } from 'react'
         })
       )
 
-      const handleScoreChange = (id, scores) => {
+      const handleScoreChange = (massar_numbr, scores) => {
         setStudents(prev =>
           prev.map(student =>
-            student.id === id ? { ...student, scores } : student
+            student.massar_numbr === massar_numbr ? { ...student, scores } : student
           )
         )
       }

@@ -4,22 +4,23 @@ import React, { useState, useRef } from 'react'
     const StudentManager = ({ students, onUpdate }) => {
       const [newStudent, setNewStudent] = useState({ 
         name: '', 
-        photoUrl: '',
-        gender: 'male' 
+        photoUrl: ''
       })
       const fileInputRef = useRef(null)
       
       const addStudent = (e) => {
         e.preventDefault()
-        const id = Math.max(0, ...students.map(s => s.id)) + 1
+        let massar_numbr = 1;
+        if (students.length > 0) {
+          massar_numbr = Math.max(0, ...students.map(s => s.massar_numbr)) + 1
+        }
         onUpdate([...students, {
-          id,
+          massar_numbr,
           name: newStudent.name,
-          photo: newStudent.photoUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${newStudent.name}&gender=${newStudent.gender}`,
-          gender: newStudent.gender,
+          photo: newStudent.photoUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${newStudent.name}`,
           scores: { x: 0, y: 0, mean: 0 }
         }])
-        setNewStudent({ name: '', photoUrl: '', gender: 'male' })
+        setNewStudent({ name: '', photoUrl: '' })
       }
 
       const handleCSVUpload = (e) => {
@@ -31,10 +32,9 @@ import React, { useState, useRef } from 'react'
             const lines = csvData.split('\n')
             const headers = lines[0].toLowerCase().split(',')
             
-            const idIndex = headers.indexOf('id')
+            const massarNumbrIndex = headers.indexOf('massar_numbr')
             const nameIndex = headers.indexOf('name')
             const photoIndex = headers.indexOf('photo')
-            const genderIndex = headers.indexOf('gender')
             const xScoreIndex = headers.indexOf('x_score')
             const yScoreIndex = headers.indexOf('y_score')
 
@@ -44,15 +44,13 @@ import React, { useState, useRef } from 'react'
               .map(line => {
                 const values = line.split(',')
                 const name = values[nameIndex]?.trim() || 'Unknown'
-                const gender = values[genderIndex]?.trim().toLowerCase() || 'male'
                 const x = parseInt(values[xScoreIndex]) || 0
                 const y = parseInt(values[yScoreIndex]) || 0
 
                 return {
-                  id: parseInt(values[idIndex]) || Math.random() * 10000,
+                  massar_numbr: values[massarNumbrIndex]?.trim() || Math.random() * 10000,
                   name,
-                  gender,
-                  photo: values[photoIndex]?.trim() || `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}&gender=${gender}`,
+                  photo: values[photoIndex]?.trim() || `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`,
                   scores: {
                     x,
                     y,
@@ -71,14 +69,13 @@ import React, { useState, useRef } from 'react'
       }
 
       const exportToCSV = () => {
-        const headers = ['id', 'name', 'photo', 'gender', 'x_score', 'y_score', 'mean_score']
+        const headers = ['massar_numbr', 'name', 'photo', 'x_score', 'y_score', 'mean_score']
         const csvContent = [
           headers.join(','),
           ...students.map(student => [
-            student.id,
+            student.massar_numbr,
             student.name,
             student.photo,
-            student.gender,
             student.scores.x,
             student.scores.y,
             student.scores.mean
@@ -126,13 +123,6 @@ import React, { useState, useRef } from 'react'
               value={newStudent.photoUrl}
               onChange={(e) => setNewStudent({ ...newStudent, photoUrl: e.target.value })}
             />
-            <select
-              value={newStudent.gender}
-              onChange={(e) => setNewStudent({ ...newStudent, gender: e.target.value })}
-            >
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
             <button type="submit">Add Student</button>
           </form>
         </div>

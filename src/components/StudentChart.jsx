@@ -13,38 +13,56 @@ import React, { useState } from 'react'
         return num.toFixed(2).replace('.', ',')
       }
 
-      // Convert score to chart position
+      // Convert score to chart position (10-20 scale)
       const getChartPosition = (score) => {
-        return (score * (CHART_SIZE - 2 * PADDING) / 20) + PADDING
+        const adjustedScore = score - 10;
+        return (adjustedScore * (CHART_SIZE - 2 * PADDING) / 10) + PADDING;
       }
 
-      // Convert position to score
+      // Convert position to score (10-20 scale)
       const getScoreFromPosition = (position) => {
-        const rawScore = ((position - PADDING) * 20) / (CHART_SIZE - 2 * PADDING)
-        return Math.min(Math.max(rawScore, 0), 20)
+        const rawScore = ((position - PADDING) * 10) / (CHART_SIZE - 2 * PADDING);
+        return Math.min(Math.max(rawScore + 10, 10), 20);
       }
 
-      // Handle mouse down event for dragging
-      const handleMouseDown = (student) => (e) => {
-        setDraggedStudent(student)
-        e.preventDefault()
+     // Handle mouse and touch down event for dragging
+     const handleMouseDown = (student) => (e) => {
+      setDraggedStudent(student);
+      e.preventDefault(); // Prevent default mouse/touch behavior
+
+      let clientX, clientY;
+      if (e.touches && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+      } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
       }
+    }
 
       // Handle mouse move event for dragging
       const handleMouseMove = (e) => {
-        if (!draggedStudent) return
+        if (!draggedStudent) return;
 
-        const rect = e.currentTarget.getBoundingClientRect()
-        const x = Math.min(Math.max(e.clientX - rect.left, PADDING), CHART_SIZE - PADDING)
-        const y = Math.min(Math.max(e.clientY - rect.top, PADDING), CHART_SIZE - PADDING)
-        
-        const xScore = getScoreFromPosition(x)
-        const yScore = getScoreFromPosition(CHART_SIZE - y)
+        const rect = e.currentTarget.getBoundingClientRect();
+        let clientX, clientY;
+        if (e.touches && e.touches.length > 0) {
+          clientX = e.touches[0].clientX;
+          clientY = e.touches[0].clientY;
+        } else {
+          clientX = e.clientX;
+          clientY = e.clientY;
+        }
+        const x = Math.min(Math.max(clientX - rect.left, PADDING), CHART_SIZE - PADDING);
+        const y = Math.min(Math.max(clientY - rect.top, PADDING), CHART_SIZE - PADDING);
 
-        onScoreChange(draggedStudent.id, {
+        const xScore = getScoreFromPosition(x);
+        const yScore = getScoreFromPosition(CHART_SIZE - y);
+
+        onScoreChange(draggedStudent.massar_numbr, {
           x: xScore,
           y: yScore
-        })
+        });
       }
 
       // Handle mouse up event for dragging
@@ -60,10 +78,15 @@ import React, { useState } from 'react'
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
+            onTouchStart={handleMouseDown}
+            onTouchMove={handleMouseMove}
+            onTouchEnd={handleMouseUp}
+            onTouchCancel={handleMouseUp}
           >
             {/* Grid lines */}
-            {Array.from({ length: 21 }).map((_, i) => {
-              const position = getChartPosition(i)
+            {Array.from({ length: 11 }).map((_, i) => {
+              const score = i + 10;
+              const position = getChartPosition(score);
               return (
                 <React.Fragment key={i}>
                   <line
@@ -105,8 +128,9 @@ import React, { useState } from 'react'
             />
 
             {/* Axis labels */}
-            {Array.from({ length: 21 }).map((_, i) => {
-              const position = getChartPosition(i)
+            {Array.from({ length: 11 }).map((_, i) => {
+              const score = i + 10;
+              const position = getChartPosition(score);
               return (
                 <React.Fragment key={i}>
                   <text
@@ -116,7 +140,7 @@ import React, { useState } from 'react'
                     fontSize="12"
                     fill="#4a5568"
                   >
-                    {formatNumber(i)}
+                    {formatNumber(score)}
                   </text>
                   <text
                     x={PADDING - 10}
@@ -126,7 +150,7 @@ import React, { useState } from 'react'
                     fill="#4a5568"
                     dominantBaseline="middle"
                   >
-                    {formatNumber(i)}
+                    {formatNumber(score)}
                   </text>
                 </React.Fragment>
               )
@@ -138,7 +162,7 @@ import React, { useState } from 'react'
               const yPos = CHART_SIZE - getChartPosition(student.scores.y)
               
               return (
-                <g key={student.id}>
+                <g key={student.massar_numbr}>
                   <foreignObject
                     x={xPos - PHOTO_SIZE/2}
                     y={yPos - PHOTO_SIZE/2}
@@ -151,7 +175,7 @@ import React, { useState } from 'react'
                         src={student.photo}
                         alt={student.name}
                         onError={(e) => {
-                          e.target.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${student.name}&gender=${student.gender}`
+                          e.target.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${student.name}`
                         }}
                       />
                     </div>
