@@ -20,7 +20,7 @@ import React, { useState, useRef } from 'react'
           photo: newStudent.photoUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${newStudent.name}`,
           scores: { x: 0, y: 0, mean: 0 }
         }])
-        setNewStudent({ name: '', photoUrl: '' })
+        setNewStudent({ name: '', photoUrl: '' });
       }
 
       const handleCSVUpload = (e) => {
@@ -57,7 +57,7 @@ import React, { useState, useRef } from 'react'
                     mean: Math.round((x + y) / 2)
                   }
                 }
-              })
+              });
 
             onUpdate(importedStudents)
             if (fileInputRef.current) {

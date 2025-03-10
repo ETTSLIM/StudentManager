@@ -71,12 +71,14 @@ import React, { useState, useMemo } from 'react'
                   <td>{student.massar_numbr}</td>
                   <td>
                     <div className="student-photo-container">
-                      <img 
-                        src={student.photo} 
+                      <img
+                        src={student.photo}
                         alt={student.name}
                         className="student-photo"
                         onError={(e) => {
-                          e.target.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${student.name}`
+                          if (!student.photo.startsWith('https://')) {
+                            e.target.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${student.name}`;
+                          }
                         }}
                       />
                     </div>

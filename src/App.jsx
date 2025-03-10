@@ -20,9 +20,9 @@ import React, { useState } from 'react'
               y,
               mean: Math.round((x + y) / 2)
             }
-          }
+          };
         })
-      )
+      );
 
       const handleScoreChange = (massar_numbr, scores) => {
         setStudents(prev =>

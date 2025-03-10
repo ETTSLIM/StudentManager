@@ -3,10 +3,64 @@ import React, { useState } from 'react'
 
     const StudentChart = ({ students, onScoreChange }) => {
       // Define chart constants
-      const CHART_SIZE = 600 // Size of the chart (width and height)
-      const PADDING = 40 // Padding around the chart
-      const PHOTO_SIZE = 40 // Size of student photos
-      const [draggedStudent, setDraggedStudent] = useState(null)
+      const CHART_SIZE = 600; // Size of the chart (width and height)
+      const PADDING = 40; // Padding around the chart
+      const PHOTO_SIZE = 40; // Size of student photos
+      const [draggedStudent, setDraggedStudent] = useState(null);
+      const [isFullscreen, setIsFullscreen] = useState(false);
+      const chartContainerRef = React.useRef(null);
+
+      const toggleFullscreen = () => {
+        const element = chartContainerRef.current;
+
+        if (!element) {
+          console.error("Chart container not found.");
+          return;
+        }
+
+        if (!document.fullscreenElement &&
+            !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {  // current working methods
+          if (element.requestFullscreen) {
+            element.requestFullscreen();
+          } else if (element.msRequestFullscreen) {
+            element.msRequestFullscreen();
+          } else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+          } else if (element.webkitRequestFullscreen) {
+            element.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+          }
+          setIsFullscreen(true);
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          }
+          setIsFullscreen(false);
+        }
+      };
+
+      React.useEffect(() => {
+        const handleFullscreenChange = () => {
+          setIsFullscreen(!!(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement));
+        };
+
+        document.addEventListener("fullscreenchange", handleFullscreenChange);
+        document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+        document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+        document.addEventListener("msfullscreenchange", handleFullscreenChange);
+
+        return () => {
+          document.removeEventListener("fullscreenchange", handleFullscreenChange);
+          document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
+          document.removeEventListener("mozfullscreenchange", handleFullscreenChange);
+          document.removeEventListener("msfullscreenchange", handleFullscreenChange);
+        };
+      }, []);
 
       // Function to format numbers with two decimal places and comma as separator
       const formatNumber = (num) => {
@@ -71,9 +125,12 @@ import React, { useState } from 'react'
       }
 
       return (
-        <div className="chart-container">
-          <svg 
-            width={CHART_SIZE} 
+        <div className="chart-container" ref={chartContainerRef}>
+          <button className="fullscreen-button" onClick={toggleFullscreen}>
+            {isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+          </button>
+          <svg
+            width={CHART_SIZE}
             height={CHART_SIZE}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -175,7 +232,9 @@ import React, { useState } from 'react'
                         src={student.photo}
                         alt={student.name}
                         onError={(e) => {
-                          e.target.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${student.name}`
+                          if (!student.photo.startsWith('https://')) {
+                            e.target.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${student.name}`;
+                          }
                         }}
                       />
                     </div>
