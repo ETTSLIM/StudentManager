@@ -92,7 +92,7 @@ import React, { useState } from 'react'
         clientX = e.clientX;
         clientY = e.clientY;
       }
-    }
+    };
 
       // Handle mouse move event for dragging
       const handleMouseMove = (e) => {
@@ -108,7 +108,7 @@ import React, { useState } from 'react'
           clientY = e.clientY;
         }
         const x = Math.min(Math.max(clientX - rect.left, PADDING), CHART_SIZE - PADDING);
-        const y = Math.min(Math.max(clientY - rect.top, PADDING), CHART_SIZE - PADDING);
+        const y = Math.min(Math.max(rect.bottom - clientY, PADDING), CHART_SIZE - PADDING);
 
         const xScore = getScoreFromPosition(x);
         const yScore = getScoreFromPosition(CHART_SIZE - y);
